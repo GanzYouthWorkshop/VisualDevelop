@@ -2,8 +2,8 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
         <Identity Id="ImageVisualizer.3c1da9bd-1fc9-4564-bf8b-23272d376a7d" Version="1.0" Language="en-US" Publisher="Gábor Kimmel" />
-        <DisplayName>ImageVisualizer</DisplayName>
-        <Description xml:space="preserve">Empty VSIX Project.</Description>
+        <DisplayName>VisualDevelop</DisplayName>
+        <Description xml:space="preserve">Adds debugger and editor visualizations.</Description>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0, 16.0)" />
