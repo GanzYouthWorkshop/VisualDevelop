@@ -35,7 +35,7 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
                 {
                     sfd.Filter = this.GetFileDialogFilterForImages();
                     sfd.CheckPathExists = true;
-                    sfd.CheckFileExists = true;
+                    sfd.CheckFileExists = false;
 
                     if(sfd.ShowDialog() == DialogResult.OK)
                     {

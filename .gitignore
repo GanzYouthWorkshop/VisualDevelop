@@ -2,3 +2,5 @@
 src/VisualDevelop/obj
 src/packages
 src/.vs
+src/Tests/bin
+src/Tests/obj

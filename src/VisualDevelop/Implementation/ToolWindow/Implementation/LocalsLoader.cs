@@ -2,6 +2,8 @@
 using EnvDTE80;
 using EnvDTE90a;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.CorDebugInterop;
+using Microsoft.VisualStudio.Debugger;
 using Microsoft.VisualStudio.Debugger.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Design;
@@ -163,7 +165,7 @@ namespace GEV.VisualDevelop.Implementation.ToolWindow.Implementation
             IDebugExpression2 expression;
             string error;
             uint errorCharIndex;
-            if (VSConstants.S_OK != expressionContext.ParseText(addressExpressionString, (uint)enum_PARSEFLAGS.PARSE_EXPRESSION, 10, out expression, out error, out errorCharIndex))
+            if (VSConstants.S_OK != expressionContext.ParseText($"{addressExpressionString}.nativeImage", (uint)enum_PARSEFLAGS.PARSE_EXPRESSION, 10, out expression, out error, out errorCharIndex))
             {
                 return null;
             }
@@ -177,11 +179,17 @@ namespace GEV.VisualDevelop.Implementation.ToolWindow.Implementation
             }
 
             DEBUG_PROPERTY_INFO[] test2 = new DEBUG_PROPERTY_INFO[64];
-            debugProperty.GetPropertyInfo((uint)(enum_DEBUGPROP_INFO_FLAGS.DEBUGPROP_INFO_VALUE | enum_DEBUGPROP_INFO_FLAGS.DEBUGPROP_INFO_VALUE_NO_TOSTRING), 10, unchecked((uint)Timeout.Infinite), null, 0, test2);
+            debugProperty.GetPropertyInfo((uint)(enum_DEBUGPROP_INFO_FLAGS.DEBUGPROP_INFO_ALL), 10, unchecked((uint)Timeout.Infinite), null, 0, test2);
             uint bmpSize = 0;
             var re = debugProperty.GetSize(out bmpSize);
 
             // Get memory context for the property.
+            IDebugReference2 reference;
+            debugProperty.GetReference(out reference);
+
+            IDebugMemoryBytes2 bytes2;
+            debugProperty.GetMemoryBytes(out bytes2);
+
             IDebugMemoryContext2 memoryContext;
             if (VSConstants.S_OK != debugProperty.GetMemoryContext(out memoryContext))
             {
@@ -204,6 +212,46 @@ namespace GEV.VisualDevelop.Implementation.ToolWindow.Implementation
 
             int intValue = Convert.ToInt32(memoryAddress, 16);
 
+            var process = GetDebuggedProcess(this.m_Dte2.Debugger);
+            var thread = process.GetThreads().FirstOrDefault(t => t.SystemPart.Id == this.m_Dte2.Debugger.CurrentThread.ID);
+            //var stackRange = thread.GetStackAddressRange();
+            var stack = thread.GetTopStackFrame();
+            ICorDebugValue value = null;
+            //var getproperty = stack.GetProperty(value, addressExpressionString);
+
+            byte[] processRam = new byte[1000000];
+            process.ReadMemory((ulong)intValue, DkmReadMemoryFlags.None, processRam);
+            string test23 = System.Text.Encoding.ASCII.GetString(processRam, 0, processRam.Length);
+
+            byte[] processRam2 = new byte[stack.FrameSize];
+            process.ReadMemory((ulong)stack.FrameBase, DkmReadMemoryFlags.None, processRam2);
+            string test13 = System.Text.Encoding.ASCII.GetString(processRam2, 0, processRam2.Length);
+
+            try
+            {
+                int width = 800;
+                int height = 600;
+                int pixelFormatSize = Image.GetPixelFormatSize(System.Drawing.Imaging.PixelFormat.Format32bppArgb) / 8;
+                int stride = width * pixelFormatSize;
+                byte[] bits = new byte[stride * height];
+                GCHandle handle = GCHandle.Alloc(bits, GCHandleType.Pinned);
+                IntPtr pointer = Marshal.UnsafeAddrOfPinnedArrayElement(bits, 0);
+                Bitmap bitmap = new Bitmap(width, height, stride, System.Drawing.Imaging.PixelFormat.Format32bppArgb, pointer);
+
+                //Bitmap bmp = new Bitmap(800, 600);
+                //IntPtr parameter = new IntPtr(intValue);
+                //GCHandle handle = GCHandle.Alloc(bmp, GCHandleType.Normal);
+                Marshal.Copy(processRam, 0, pointer, processRam.Length);
+                handle.Free();
+
+
+                object o = handle.Target;
+
+            }
+            catch(Exception ex)
+            {
+
+            }
             //try
             //{
             //    IntPtr ptr = new IntPtr(intValue);
@@ -269,16 +317,36 @@ namespace GEV.VisualDevelop.Implementation.ToolWindow.Implementation
                     
                 }
 
-                IntPtr parameter = new IntPtr(intValue);
-                GCHandle handle = (GCHandle)parameter;
+                //IntPtr parameter = new IntPtr(intValue);
+                //GCHandle handle = (GCHandle)parameter;
 
-                object o = handle.Target;
+                //object o = handle.Target;
             }
             //else
             //{
             //    // Read successful.
             //}
 
+            return null;
+        }
+
+        private static DkmProcess GetDebuggedProcess(Debugger debugger)
+        {
+            DkmProcess[] procs = DkmProcess.GetProcesses();
+            if (procs.Length == 1)
+            {
+                return procs[0];
+            }
+            else if (procs.Length > 1)
+            {
+                foreach (DkmProcess proc in procs)
+                {
+                    if (proc.Path == debugger.CurrentProcess.Name)
+                    {
+                        return proc;
+                    }
+                }
+            }
             return null;
         }
 
