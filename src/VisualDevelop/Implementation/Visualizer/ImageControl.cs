@@ -7,6 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing.Imaging;
+using System.Resources;
+using System.Reflection;
+using System.Globalization;
 
 namespace GEV.VisualDevelop.Implementation.Visualizer
 {
@@ -15,10 +19,16 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
         private Rectangle m_MinimapArea;
         private Bitmap m_ThumbnailBitmap;
 
+        private ColorPalette m_OriginalPalette;
+
         public Image Image
         {
             get { return this.imgBox.Image; }
-            set { this.imgBox.Image = value; }
+            set
+            {
+                this.imgBox.Image = value;
+                this.m_OriginalPalette = this.imgBox.Image.Palette;
+            }
         }
 
         public ImageControl()
@@ -100,6 +110,47 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
             }
         }
 
+        private ColorPalette GeneratePalette(Bitmap paletteBase, int rangeMin, int rangeMax)
+        {
+            ColorPalette result;
+            using (Bitmap bmp = new Bitmap(10, 10, PixelFormat.Format8bppIndexed))
+            {
+                result = bmp.Palette;
+
+                for (int i = 0; i < 255; i++)
+                {
+                    if(i < rangeMin)
+                    {
+                        result.Entries[i] = Color.Transparent;
+                    }
+                    else if(i > rangeMax)
+                    {
+                        result.Entries[i] = Color.Transparent;
+                    }
+                    else
+                    {
+                        int range = (rangeMax - rangeMin);
+                        int zero = rangeMin;
+                        float increment = 255f / range;
+
+                        int index = (int)Math.Min((i - zero) * increment, 254);
+                        result.Entries[i] = paletteBase.GetPixel(index, 0);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private void SetPalette()
+        {
+
+            Bitmap bmp = Properties.Resources.ResourceManager.GetObject($"palette_{this.cbxSelectedPalette.SelectedItem}") as Bitmap;
+            this.Image.Palette = this.GeneratePalette(bmp, (int)this.nudRangeMin.Value, (int)this.nudRangeMax.Value);
+
+            this.imgBox.Invalidate();
+        }
+
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (this.imgBox != null)
@@ -172,6 +223,55 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
         private void imgMinimap_SelectionRegionChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if(this.chkOverridePalette.Checked)
+            {
+                this.SetPalette();
+            }
+            else
+            {
+                this.Image.Palette = this.m_OriginalPalette;
+                this.imgBox.Invalidate();
+            }
+        }
+
+        private void cbxSelectedPalette_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.chkOverridePalette.Checked)
+            {
+                this.SetPalette();
+            }
+        }
+
+        private void rangeSelectorControl1_Paint(object sender, PaintEventArgs e)
+        {
+            if (this.chkOverridePalette.Checked)
+            {
+                this.SetPalette();
+            }
+        }
+
+        private void nudRangeMax_ValueChanged(object sender, EventArgs e)
+        {
+            this.nudRangeMin.Maximum = Math.Min(this.nudRangeMax.Value - 1, 254);
+
+            if (this.chkOverridePalette.Checked)
+            {
+                this.SetPalette();
+            }
+        }
+
+        private void nudRangeMin_ValueChanged(object sender, EventArgs e)
+        {
+            this.nudRangeMax.Minimum = Math.Max(this.nudRangeMin.Value + 1, 1);
+
+            if (this.chkOverridePalette.Checked)
+            {
+                this.SetPalette();
+            }
         }
     }
 }

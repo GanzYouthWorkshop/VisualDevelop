@@ -4,3 +4,6 @@ src/packages
 src/.vs
 src/Tests/bin
 src/Tests/obj
+src/VisualDevelop/VisualDevelop.csproj.user
+src/VisualDevelop/StyleCop.Cache
+src/Tests/StyleCop.Cache

@@ -30,20 +30,35 @@
         {
             this.imgBox = new Cyotek.Windows.Forms.ImageBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnFit = new System.Windows.Forms.Button();
-            this.chkMinimap = new System.Windows.Forms.CheckBox();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.pnlColor = new System.Windows.Forms.Panel();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.chkMinimap = new System.Windows.Forms.CheckBox();
+            this.btnFit = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.nudRangeMax = new System.Windows.Forms.NumericUpDown();
+            this.nudRangeMin = new System.Windows.Forms.NumericUpDown();
+            this.cbxSelectedPalette = new System.Windows.Forms.ComboBox();
+            this.chkOverridePalette = new System.Windows.Forms.CheckBox();
             this.imgMinimap = new Cyotek.Windows.Forms.ImageBox();
             this.panel1.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRangeMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRangeMin)).BeginInit();
             this.SuspendLayout();
             // 
             // imgBox
             // 
             this.imgBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imgBox.ImageBorderColor = System.Drawing.Color.Red;
+            this.imgBox.ImageBorderStyle = Cyotek.Windows.Forms.ImageBoxBorderStyle.FixedSingle;
             this.imgBox.Location = new System.Drawing.Point(0, 0);
             this.imgBox.Name = "imgBox";
-            this.imgBox.Size = new System.Drawing.Size(1309, 618);
+            this.imgBox.Size = new System.Drawing.Size(1309, 607);
             this.imgBox.TabIndex = 0;
             this.imgBox.Zoomed += new System.EventHandler<Cyotek.Windows.Forms.ImageBoxZoomEventArgs>(this.imgBox_Zoomed);
             this.imgBox.Scroll += new System.Windows.Forms.ScrollEventHandler(this.imgBox_Scroll);
@@ -52,25 +67,55 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.btnFit);
-            this.panel1.Controls.Add(this.chkMinimap);
-            this.panel1.Controls.Add(this.pnlColor);
-            this.panel1.Controls.Add(this.lblStatus);
+            this.panel1.Controls.Add(this.panel4);
+            this.panel1.Controls.Add(this.panel3);
+            this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 618);
+            this.panel1.Location = new System.Drawing.Point(0, 607);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1309, 31);
+            this.panel1.Size = new System.Drawing.Size(1309, 42);
             this.panel1.TabIndex = 1;
             // 
-            // btnFit
+            // panel4
             // 
-            this.btnFit.Location = new System.Drawing.Point(65, 3);
-            this.btnFit.Name = "btnFit";
-            this.btnFit.Size = new System.Drawing.Size(75, 23);
-            this.btnFit.TabIndex = 3;
-            this.btnFit.Text = "Fit image";
-            this.btnFit.UseVisualStyleBackColor = true;
-            this.btnFit.Click += new System.EventHandler(this.btnFit_Click);
+            this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel4.Controls.Add(this.pnlColor);
+            this.panel4.Controls.Add(this.lblStatus);
+            this.panel4.Location = new System.Drawing.Point(1106, 6);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(200, 32);
+            this.panel4.TabIndex = 6;
+            // 
+            // pnlColor
+            // 
+            this.pnlColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlColor.Location = new System.Drawing.Point(170, 3);
+            this.pnlColor.Name = "pnlColor";
+            this.pnlColor.Size = new System.Drawing.Size(25, 25);
+            this.pnlColor.TabIndex = 1;
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Location = new System.Drawing.Point(1, 3);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Padding = new System.Windows.Forms.Padding(7);
+            this.lblStatus.Size = new System.Drawing.Size(163, 27);
+            this.lblStatus.TabIndex = 0;
+            this.lblStatus.Text = "X: {###}; Y: {###} - G: {###}";
+            // 
+            // panel3
+            // 
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.chkMinimap);
+            this.panel3.Controls.Add(this.btnFit);
+            this.panel3.Location = new System.Drawing.Point(3, 6);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(145, 32);
+            this.panel3.TabIndex = 6;
             // 
             // chkMinimap
             // 
@@ -86,32 +131,100 @@
             this.chkMinimap.UseVisualStyleBackColor = true;
             this.chkMinimap.CheckedChanged += new System.EventHandler(this.chkMinimap_CheckedChanged);
             // 
-            // pnlColor
+            // btnFit
             // 
-            this.pnlColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlColor.Location = new System.Drawing.Point(1281, 3);
-            this.pnlColor.Name = "pnlColor";
-            this.pnlColor.Size = new System.Drawing.Size(25, 25);
-            this.pnlColor.TabIndex = 1;
+            this.btnFit.Location = new System.Drawing.Point(65, 3);
+            this.btnFit.Name = "btnFit";
+            this.btnFit.Size = new System.Drawing.Size(75, 23);
+            this.btnFit.TabIndex = 3;
+            this.btnFit.Text = "Fit image";
+            this.btnFit.UseVisualStyleBackColor = true;
+            this.btnFit.Click += new System.EventHandler(this.btnFit_Click);
             // 
-            // lblStatus
+            // panel2
             // 
-            this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(1112, 3);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Padding = new System.Windows.Forms.Padding(7);
-            this.lblStatus.Size = new System.Drawing.Size(163, 27);
-            this.lblStatus.TabIndex = 0;
-            this.lblStatus.Text = "X: {###}; Y: {###} - G: {###}";
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.label1);
+            this.panel2.Controls.Add(this.nudRangeMax);
+            this.panel2.Controls.Add(this.nudRangeMin);
+            this.panel2.Controls.Add(this.cbxSelectedPalette);
+            this.panel2.Controls.Add(this.chkOverridePalette);
+            this.panel2.Location = new System.Drawing.Point(154, 6);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(712, 32);
+            this.panel2.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(248, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(73, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Palette range:";
+            // 
+            // nudRangeMax
+            // 
+            this.nudRangeMax.Location = new System.Drawing.Point(377, 6);
+            this.nudRangeMax.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudRangeMax.Name = "nudRangeMax";
+            this.nudRangeMax.Size = new System.Drawing.Size(44, 20);
+            this.nudRangeMax.TabIndex = 7;
+            this.nudRangeMax.Value = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudRangeMax.ValueChanged += new System.EventHandler(this.nudRangeMax_ValueChanged);
+            // 
+            // nudRangeMin
+            // 
+            this.nudRangeMin.Location = new System.Drawing.Point(327, 6);
+            this.nudRangeMin.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudRangeMin.Name = "nudRangeMin";
+            this.nudRangeMin.Size = new System.Drawing.Size(44, 20);
+            this.nudRangeMin.TabIndex = 6;
+            this.nudRangeMin.ValueChanged += new System.EventHandler(this.nudRangeMin_ValueChanged);
+            // 
+            // cbxSelectedPalette
+            // 
+            this.cbxSelectedPalette.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxSelectedPalette.FormattingEnabled = true;
+            this.cbxSelectedPalette.Items.AddRange(new object[] {
+            "grayscale",
+            "hue",
+            "bluered"});
+            this.cbxSelectedPalette.Location = new System.Drawing.Point(110, 5);
+            this.cbxSelectedPalette.Name = "cbxSelectedPalette";
+            this.cbxSelectedPalette.Size = new System.Drawing.Size(121, 21);
+            this.cbxSelectedPalette.TabIndex = 5;
+            this.cbxSelectedPalette.SelectedIndexChanged += new System.EventHandler(this.cbxSelectedPalette_SelectedIndexChanged);
+            // 
+            // chkOverridePalette
+            // 
+            this.chkOverridePalette.AutoSize = true;
+            this.chkOverridePalette.Location = new System.Drawing.Point(3, 7);
+            this.chkOverridePalette.Name = "chkOverridePalette";
+            this.chkOverridePalette.Size = new System.Drawing.Size(101, 17);
+            this.chkOverridePalette.TabIndex = 4;
+            this.chkOverridePalette.Text = "Override palette";
+            this.chkOverridePalette.UseVisualStyleBackColor = true;
+            this.chkOverridePalette.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // imgMinimap
             // 
             this.imgMinimap.AllowZoom = false;
             this.imgMinimap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.imgMinimap.AutoPan = false;
-            this.imgMinimap.Location = new System.Drawing.Point(0, 316);
+            this.imgMinimap.Location = new System.Drawing.Point(0, 307);
             this.imgMinimap.Margin = new System.Windows.Forms.Padding(0, 3, 3, 0);
             this.imgMinimap.Name = "imgMinimap";
             this.imgMinimap.SelectionMode = Cyotek.Windows.Forms.ImageBoxSelectionMode.Rectangle;
@@ -134,7 +247,14 @@
             this.Size = new System.Drawing.Size(1309, 649);
             this.Load += new System.EventHandler(this.ImageControl_Load);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRangeMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRangeMin)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -148,5 +268,13 @@
         private Cyotek.Windows.Forms.ImageBox imgMinimap;
         private System.Windows.Forms.Button btnFit;
         private System.Windows.Forms.CheckBox chkMinimap;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.ComboBox cbxSelectedPalette;
+        private System.Windows.Forms.CheckBox chkOverridePalette;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown nudRangeMax;
+        private System.Windows.Forms.NumericUpDown nudRangeMin;
     }
 }

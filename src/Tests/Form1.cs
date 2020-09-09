@@ -21,8 +21,13 @@ namespace Tests
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Bitmap bmp = new Bitmap(@"C:\Users\gabor.kimmel\Pictures\ui_auth.png");
+            Bitmap bmp = new Bitmap(@"C:\Users\Szlatyka\Pictures\71287.bmp");
             new FormImage(bmp).Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
