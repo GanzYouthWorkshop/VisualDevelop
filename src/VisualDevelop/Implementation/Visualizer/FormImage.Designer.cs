@@ -74,6 +74,7 @@
             // imgBox
             // 
             this.imgBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imgBox.Image = null;
             this.imgBox.Location = new System.Drawing.Point(0, 24);
             this.imgBox.Name = "imgBox";
             this.imgBox.Size = new System.Drawing.Size(800, 426);
@@ -89,7 +90,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormImage";
             this.ShowIcon = false;
-            this.Text = "Image Visualizet";
+            this.Text = "Image Visualizer";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

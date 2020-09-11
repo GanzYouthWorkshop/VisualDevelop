@@ -68,13 +68,17 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
             string result = string.Empty;
 
             List<string> foundCodecs = new List<string>();
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
-
-            foreach (ImageCodecInfo c in codecs)
+            string[] codecs = new string[]
             {
-                string codecName = c.CodecName.Substring(8).Replace("Codec", "Files").Trim();
+                "png",
+                "jpg",
+                "tiff",
+                "bmp",
+            };
 
-                foundCodecs.Add($"{codecName} ({c.FilenameExtension})|{c.FilenameExtension}");
+            foreach (string c in codecs)
+            {
+                foundCodecs.Add($"{c.ToUpper()} files (*.{c})|*.{c}");
             }
 
             return String.Join("|", foundCodecs);

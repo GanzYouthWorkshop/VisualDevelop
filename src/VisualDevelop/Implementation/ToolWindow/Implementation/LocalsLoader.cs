@@ -1,4 +1,5 @@
-﻿using EnvDTE;
+﻿using Emgu.CV.Structure;
+using EnvDTE;
 using EnvDTE80;
 using EnvDTE90a;
 using Microsoft.VisualStudio;
@@ -165,7 +166,7 @@ namespace GEV.VisualDevelop.Implementation.ToolWindow.Implementation
             IDebugExpression2 expression;
             string error;
             uint errorCharIndex;
-            if (VSConstants.S_OK != expressionContext.ParseText($"{addressExpressionString}.nativeImage", (uint)enum_PARSEFLAGS.PARSE_EXPRESSION, 10, out expression, out error, out errorCharIndex))
+            if (VSConstants.S_OK != expressionContext.ParseText($"{addressExpressionString}.Ptr", (uint)enum_PARSEFLAGS.PARSE_EXPRESSION, 10, out expression, out error, out errorCharIndex))
             {
                 return null;
             }
@@ -219,16 +220,21 @@ namespace GEV.VisualDevelop.Implementation.ToolWindow.Implementation
             ICorDebugValue value = null;
             //var getproperty = stack.GetProperty(value, addressExpressionString);
 
-            byte[] processRam = new byte[1000000];
-            process.ReadMemory((ulong)intValue, DkmReadMemoryFlags.None, processRam);
-            string test23 = System.Text.Encoding.ASCII.GetString(processRam, 0, processRam.Length);
+            //byte[] processRam = new byte[1000000];
+            //process.ReadMemory((ulong)intValue, DkmReadMemoryFlags.None, processRam);
+            //string test23 = System.Text.Encoding.ASCII.GetString(processRam, 0, processRam.Length);
 
-            byte[] processRam2 = new byte[stack.FrameSize];
-            process.ReadMemory((ulong)stack.FrameBase, DkmReadMemoryFlags.None, processRam2);
-            string test13 = System.Text.Encoding.ASCII.GetString(processRam2, 0, processRam2.Length);
+            //byte[] processRam2 = new byte[stack.FrameSize];
+            //process.ReadMemory((ulong)stack.FrameBase, DkmReadMemoryFlags.None, processRam2);
+            //string test13 = System.Text.Encoding.ASCII.GetString(processRam2, 0, processRam2.Length);
 
             try
             {
+                Emgu.CV.Image<Gray, byte> img431 = new Emgu.CV.Image<Gray, byte>(800, 600, 800, new IntPtr(intValue));
+
+
+
+
                 int width = 800;
                 int height = 600;
                 int pixelFormatSize = Image.GetPixelFormatSize(System.Drawing.Imaging.PixelFormat.Format32bppArgb) / 8;
@@ -241,7 +247,7 @@ namespace GEV.VisualDevelop.Implementation.ToolWindow.Implementation
                 //Bitmap bmp = new Bitmap(800, 600);
                 //IntPtr parameter = new IntPtr(intValue);
                 //GCHandle handle = GCHandle.Alloc(bmp, GCHandleType.Normal);
-                Marshal.Copy(processRam, 0, pointer, processRam.Length);
+                //Marshal.Copy(processRam, 0, pointer, processRam.Length);
                 handle.Free();
 
 
@@ -278,6 +284,11 @@ namespace GEV.VisualDevelop.Implementation.ToolWindow.Implementation
             //// Allocate space for the result.
             byte[] data = new byte[dataSize];
             uint writtenBytes = 0;
+
+            int size = 0;
+            data = this.ReadMemory(memoryContext, memoryBytes, (int)dataSize, 1024, out size);
+            Emgu.CV.Image<Gray, byte> img = new Emgu.CV.Image<Gray, byte>(800, 600);
+            Marshal.Copy(data, 0, img.Ptr, size);
 
             // Read data from the debuggee.
             uint unreadable = 0;
@@ -350,15 +361,45 @@ namespace GEV.VisualDevelop.Implementation.ToolWindow.Implementation
             return null;
         }
 
-        //public object RetrieveFromDebugee(string addressString)
-        //{
-        //    object result = null;
+        public byte[] ReadMemory(IDebugMemoryContext2 context, IDebugMemoryBytes2 memory, int bytes, int readStep, out int finalRead)
+        {
+            byte[] result = new byte[bytes];
 
-        //    IDebugObject2 obj;
+            int allRead = 0;
+            finalRead = 0;
+            while(allRead < bytes)
+            {
+                IDebugMemoryContext2 currentContext = null;
+                if (context.Add((ulong)allRead, out currentContext) != VSConstants.S_OK)
+                {
+                    return null;
+                }
 
-        //    obj.GetICorDebugValue(out result);
+                if (bytes - allRead < readStep)
+                {
+                    readStep = bytes - allRead;
+                }
 
-        //    return result;
-        //}
+                byte[] buffer = new byte[readStep];
+                uint bufferRead = 0;
+                uint unreadable = 0;
+
+                if(memory.ReadAt(currentContext, (uint)readStep, buffer, out bufferRead, ref unreadable) != VSConstants.S_OK)
+                {
+                    return null;
+                }
+
+                if(bufferRead == 0 && unreadable == readStep)
+                {
+                    break;
+                }
+
+                Buffer.BlockCopy(buffer, 0, result, allRead, (int)bufferRead);
+                allRead += (int)bufferRead;
+            }
+
+            finalRead = allRead;
+            return result;
+        }
     }
 }

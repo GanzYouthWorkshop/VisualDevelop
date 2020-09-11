@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.imgBox = new Cyotek.Windows.Forms.ImageBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -43,12 +45,20 @@
             this.cbxSelectedPalette = new System.Windows.Forms.ComboBox();
             this.chkOverridePalette = new System.Windows.Forms.CheckBox();
             this.imgMinimap = new Cyotek.Windows.Forms.ImageBox();
+            this.tabsTools = new System.Windows.Forms.TabControl();
+            this.tabMinimap = new System.Windows.Forms.TabPage();
+            this.tabHisto = new System.Windows.Forms.TabPage();
+            this.chartHisto = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRangeMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudRangeMin)).BeginInit();
+            this.tabsTools.SuspendLayout();
+            this.tabMinimap.SuspendLayout();
+            this.tabHisto.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartHisto)).BeginInit();
             this.SuspendLayout();
             // 
             // imgBox
@@ -58,6 +68,7 @@
             this.imgBox.ImageBorderStyle = Cyotek.Windows.Forms.ImageBoxBorderStyle.FixedSingle;
             this.imgBox.Location = new System.Drawing.Point(0, 0);
             this.imgBox.Name = "imgBox";
+            this.imgBox.ShowPixelGrid = true;
             this.imgBox.Size = new System.Drawing.Size(1309, 607);
             this.imgBox.TabIndex = 0;
             this.imgBox.Zoomed += new System.EventHandler<Cyotek.Windows.Forms.ImageBoxZoomEventArgs>(this.imgBox_Zoomed);
@@ -200,6 +211,7 @@
             this.cbxSelectedPalette.FormattingEnabled = true;
             this.cbxSelectedPalette.Items.AddRange(new object[] {
             "grayscale",
+            "monochrome",
             "hue",
             "bluered"});
             this.cbxSelectedPalette.Location = new System.Drawing.Point(110, 5);
@@ -222,9 +234,9 @@
             // imgMinimap
             // 
             this.imgMinimap.AllowZoom = false;
-            this.imgMinimap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.imgMinimap.AutoPan = false;
-            this.imgMinimap.Location = new System.Drawing.Point(0, 307);
+            this.imgMinimap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imgMinimap.Location = new System.Drawing.Point(3, 3);
             this.imgMinimap.Margin = new System.Windows.Forms.Padding(0, 3, 3, 0);
             this.imgMinimap.Name = "imgMinimap";
             this.imgMinimap.SelectionMode = Cyotek.Windows.Forms.ImageBoxSelectionMode.Rectangle;
@@ -236,11 +248,60 @@
             this.imgMinimap.SelectionRegionChanged += new System.EventHandler(this.imgMinimap_SelectionRegionChanged);
             this.imgMinimap.Paint += new System.Windows.Forms.PaintEventHandler(this.imgMinimap_Paint);
             // 
+            // tabsTools
+            // 
+            this.tabsTools.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.tabsTools.Controls.Add(this.tabMinimap);
+            this.tabsTools.Controls.Add(this.tabHisto);
+            this.tabsTools.Location = new System.Drawing.Point(0, 275);
+            this.tabsTools.Margin = new System.Windows.Forms.Padding(0);
+            this.tabsTools.Name = "tabsTools";
+            this.tabsTools.SelectedIndex = 0;
+            this.tabsTools.Size = new System.Drawing.Size(314, 332);
+            this.tabsTools.TabIndex = 3;
+            // 
+            // tabMinimap
+            // 
+            this.tabMinimap.Controls.Add(this.imgMinimap);
+            this.tabMinimap.Location = new System.Drawing.Point(4, 22);
+            this.tabMinimap.Name = "tabMinimap";
+            this.tabMinimap.Padding = new System.Windows.Forms.Padding(3);
+            this.tabMinimap.Size = new System.Drawing.Size(306, 306);
+            this.tabMinimap.TabIndex = 0;
+            this.tabMinimap.Text = "Minimap";
+            this.tabMinimap.UseVisualStyleBackColor = true;
+            // 
+            // tabHisto
+            // 
+            this.tabHisto.Controls.Add(this.chartHisto);
+            this.tabHisto.Location = new System.Drawing.Point(4, 22);
+            this.tabHisto.Name = "tabHisto";
+            this.tabHisto.Padding = new System.Windows.Forms.Padding(3);
+            this.tabHisto.Size = new System.Drawing.Size(306, 306);
+            this.tabHisto.TabIndex = 1;
+            this.tabHisto.Text = "Histogram";
+            this.tabHisto.UseVisualStyleBackColor = true;
+            // 
+            // chartHisto
+            // 
+            chartArea1.AxisY.LabelStyle.Enabled = false;
+            chartArea1.Name = "ChartArea1";
+            this.chartHisto.ChartAreas.Add(chartArea1);
+            this.chartHisto.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend1.Enabled = false;
+            legend1.Name = "Legend1";
+            this.chartHisto.Legends.Add(legend1);
+            this.chartHisto.Location = new System.Drawing.Point(3, 3);
+            this.chartHisto.Name = "chartHisto";
+            this.chartHisto.Size = new System.Drawing.Size(300, 300);
+            this.chartHisto.TabIndex = 0;
+            this.chartHisto.Text = "chart1";
+            // 
             // ImageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.imgMinimap);
+            this.Controls.Add(this.tabsTools);
             this.Controls.Add(this.imgBox);
             this.Controls.Add(this.panel1);
             this.Name = "ImageControl";
@@ -255,6 +316,10 @@
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRangeMax)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudRangeMin)).EndInit();
+            this.tabsTools.ResumeLayout(false);
+            this.tabMinimap.ResumeLayout(false);
+            this.tabHisto.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chartHisto)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -276,5 +341,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown nudRangeMax;
         private System.Windows.Forms.NumericUpDown nudRangeMin;
+        private System.Windows.Forms.TabControl tabsTools;
+        private System.Windows.Forms.TabPage tabMinimap;
+        private System.Windows.Forms.TabPage tabHisto;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartHisto;
     }
 }

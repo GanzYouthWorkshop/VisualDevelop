@@ -11,6 +11,8 @@ using System.Drawing.Imaging;
 using System.Resources;
 using System.Reflection;
 using System.Globalization;
+using Emgu.CV.Structure;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace GEV.VisualDevelop.Implementation.Visualizer
 {
@@ -27,13 +29,19 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
             set
             {
                 this.imgBox.Image = value;
-                this.m_OriginalPalette = this.imgBox.Image.Palette;
+                if (this.imgBox.Image != null)
+                {
+                    this.m_OriginalPalette = this.imgBox.Image.Palette;
+                    this.GenerateHistogramData();
+                }
             }
         }
 
         public ImageControl()
         {
             InitializeComponent();
+
+            this.cbxSelectedPalette.SelectedIndex = 0;
         }
 
         private void UpdateMiniMap()
@@ -121,11 +129,11 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
                 {
                     if(i < rangeMin)
                     {
-                        result.Entries[i] = Color.Transparent;
+                        result.Entries[i] = paletteBase.GetPixel(0, 0);
                     }
                     else if(i > rangeMax)
                     {
-                        result.Entries[i] = Color.Transparent;
+                        result.Entries[i] = paletteBase.GetPixel(254, 0);
                     }
                     else
                     {
@@ -151,6 +159,43 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
             this.imgBox.Invalidate();
         }
 
+        private void GenerateHistogramData()
+        {
+            if(this.Image != null)
+            {
+                Emgu.CV.Image<Bgr, byte> img = new Emgu.CV.Image<Bgr, byte>(this.Image as Bitmap);
+
+                Emgu.CV.Image<Gray, byte>[] channels = img.Split();
+
+                List<Color> colors = new List<Color>()
+                {
+                    Color.FromArgb(128, 0, 0, 255),
+                    Color.FromArgb(128, 0, 255, 0),
+                    Color.FromArgb(128, 255, 0, 0),
+                };
+
+                for(int c = 0; c < channels.Length; c++)
+                {
+                    Emgu.CV.DenseHistogram histo = new Emgu.CV.DenseHistogram(255, new RangeF(0, 255));
+                    histo.Calculate<byte>(new Emgu.CV.Image<Gray, byte>[] { channels[c] }, false, null);
+                    float[] values = histo.GetBinValues();
+
+                    Series channelSeries = new Series()
+                    {
+                        ChartType = SeriesChartType.SplineArea,
+                        Color = colors[c],
+                    };
+
+                    for (int i = 0; i < 255; i++)
+                    {
+                        channelSeries.Points.AddXY(i, values[i]);
+                    }
+
+                    this.chartHisto.Series.Add(channelSeries);
+                }
+            }
+        }
+
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (this.imgBox != null)
@@ -173,7 +218,7 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
 
         private void chkMinimap_CheckedChanged(object sender, EventArgs e)
         {
-            this.imgMinimap.Visible = this.chkMinimap.Checked;
+            this.tabsTools.Visible = this.chkMinimap.Checked;
             if(this.chkMinimap.Checked)
             {
                 this.RefreshMiniMap();

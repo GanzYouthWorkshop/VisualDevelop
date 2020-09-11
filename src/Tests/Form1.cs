@@ -1,4 +1,6 @@
-﻿using GEV.VisualDevelop.Implementation.Visualizer;
+﻿using Emgu.CV;
+using Emgu.CV.Structure;
+using GEV.VisualDevelop.Implementation.Visualizer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,13 +23,15 @@ namespace Tests
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Bitmap bmp = new Bitmap(@"C:\Users\Szlatyka\Pictures\71287.bmp");
+            Bitmap bmp = new Bitmap(@"C:\Users\Szlatyka\Pictures\71287.jpg");
             new FormImage(bmp).Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            Image<Gray, byte> img = new Image<Gray, byte>(800, 600);
 
+            img.Draw(new Rectangle(100, 100, 100, 100), new Gray(128), 6);
         }
     }
 }
