@@ -22,6 +22,7 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
         private Bitmap m_ThumbnailBitmap;
 
         private ColorPalette m_OriginalPalette;
+        private Image m_OriginalImage;
 
         public Image Image
         {
@@ -29,11 +30,16 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
             set
             {
                 this.imgBox.Image = value;
+                this.m_OriginalImage?.Dispose();
+                this.m_OriginalImage = null;
+
                 if (this.imgBox.Image != null)
                 {
                     this.m_OriginalPalette = this.imgBox.Image.Palette;
                     this.GenerateHistogramData();
+                    this.m_OriginalImage = new Bitmap(this.Image);
                 }
+
             }
         }
 
@@ -182,7 +188,7 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
 
                     Series channelSeries = new Series()
                     {
-                        ChartType = SeriesChartType.SplineArea,
+                        ChartType = SeriesChartType.Column,
                         Color = colors[c],
                     };
 
@@ -191,6 +197,19 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
                         channelSeries.Points.AddXY(i, values[i]);
                     }
 
+                    VerticalLineAnnotation va = new VerticalLineAnnotation()
+                    {
+                        LineColor = colors[c],
+                        LineWidth = 3,
+                        AxisX = chartHisto.ChartAreas[0].AxisX,
+                        AxisY = chartHisto.ChartAreas[0].AxisY,
+                        AllowMoving = true,
+                        IsInfinitive = true,
+                        ClipToChartArea = chartHisto.ChartAreas[0].Name,
+                        AllowAnchorMoving = false,
+                    };
+
+                    this.chartHisto.Annotations.Add(va);
                     this.chartHisto.Series.Add(channelSeries);
                 }
             }
@@ -207,6 +226,13 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
 
                     this.lblStatus.Text = $"X: {p.X}; Y: {p.Y} - G: {c.R}";
                     this.pnlColor.BackColor = c;
+
+                    Color histoColor = (this.m_OriginalImage as Bitmap).GetPixel(p.X, p.Y);
+                    this.chartHisto.Annotations[0].AnchorDataPoint = this.chartHisto.Series[0].Points[histoColor.B];
+                    this.chartHisto.Annotations[1].AnchorDataPoint = this.chartHisto.Series[0].Points[histoColor.G];
+                    this.chartHisto.Annotations[2].AnchorDataPoint = this.chartHisto.Series[0].Points[histoColor.R];
+
+                    this.chartHisto.UpdateAnnotations();
                 }
                 catch(Exception)
                 {
