@@ -121,9 +121,6 @@
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="BaseInterfaces">
-      <HintPath>dll\BaseInterfaces.dll</HintPath>
-    </Reference>
     <Reference Include="Cyotek.Windows.Forms.ImageBox, Version=1.2.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
       <HintPath>..\packages\CyotekImageBox.1.2.1\lib\net20\Cyotek.Windows.Forms.ImageBox.dll</HintPath>
     </Reference>

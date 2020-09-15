@@ -151,6 +151,7 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
                         result.Entries[i] = paletteBase.GetPixel(index, 0);
                     }
                 }
+                result.Entries[255] = paletteBase.GetPixel(254, 0);
             }
 
             return result;
@@ -182,7 +183,7 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
 
                 for(int c = 0; c < channels.Length; c++)
                 {
-                    Emgu.CV.DenseHistogram histo = new Emgu.CV.DenseHistogram(255, new RangeF(0, 255));
+                    Emgu.CV.DenseHistogram histo = new Emgu.CV.DenseHistogram(256, new RangeF(0, 255));
                     histo.Calculate<byte>(new Emgu.CV.Image<Gray, byte>[] { channels[c] }, false, null);
                     float[] values = histo.GetBinValues();
 
@@ -192,7 +193,7 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
                         Color = colors[c],
                     };
 
-                    for (int i = 0; i < 255; i++)
+                    for (int i = 0; i < 256; i++)
                     {
                         channelSeries.Points.AddXY(i, values[i]);
                     }
@@ -227,17 +228,27 @@ namespace GEV.VisualDevelop.Implementation.Visualizer
                     this.lblStatus.Text = $"X: {p.X}; Y: {p.Y} - G: {c.R}";
                     this.pnlColor.BackColor = c;
 
-                    Color histoColor = (this.m_OriginalImage as Bitmap).GetPixel(p.X, p.Y);
-                    this.chartHisto.Annotations[0].AnchorDataPoint = this.chartHisto.Series[0].Points[histoColor.B];
-                    this.chartHisto.Annotations[1].AnchorDataPoint = this.chartHisto.Series[0].Points[histoColor.G];
-                    this.chartHisto.Annotations[2].AnchorDataPoint = this.chartHisto.Series[0].Points[histoColor.R];
+                    try
+                    {
+                        Color histoColor = (this.m_OriginalImage as Bitmap).GetPixel(p.X, p.Y);
+                        this.chartHisto.Annotations[0].AnchorDataPoint = this.chartHisto.Series[0].Points[histoColor.B];
+                        this.chartHisto.Annotations[1].AnchorDataPoint = this.chartHisto.Series[0].Points[histoColor.G];
+                        this.chartHisto.Annotations[2].AnchorDataPoint = this.chartHisto.Series[0].Points[histoColor.R];
 
-                    this.chartHisto.UpdateAnnotations();
+                        this.chartHisto.UpdateAnnotations();
+
+                        this.lblError.Text = "---";
+                    }
+                    catch(Exception ex)
+                    {
+                        this.lblError.Text = ex.Message;
+                    }
                 }
-                catch(Exception)
+                catch(Exception ex)
                 {
                     //Most probably just out of bounds...
                     this.lblStatus.Text = "---";
+                    this.lblError.Text = ex.Message;
                 }
             }
         }

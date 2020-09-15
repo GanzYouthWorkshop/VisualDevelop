@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.imgBox = new Cyotek.Windows.Forms.ImageBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblError = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.pnlColor = new System.Windows.Forms.Panel();
             this.lblStatus = new System.Windows.Forms.Label();
@@ -69,7 +70,7 @@
             this.imgBox.Location = new System.Drawing.Point(0, 0);
             this.imgBox.Name = "imgBox";
             this.imgBox.ShowPixelGrid = true;
-            this.imgBox.Size = new System.Drawing.Size(1309, 607);
+            this.imgBox.Size = new System.Drawing.Size(1137, 438);
             this.imgBox.TabIndex = 0;
             this.imgBox.Zoomed += new System.EventHandler<Cyotek.Windows.Forms.ImageBoxZoomEventArgs>(this.imgBox_Zoomed);
             this.imgBox.Scroll += new System.Windows.Forms.ScrollEventHandler(this.imgBox_Scroll);
@@ -78,14 +79,26 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lblError);
             this.panel1.Controls.Add(this.panel4);
             this.panel1.Controls.Add(this.panel3);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 607);
+            this.panel1.Location = new System.Drawing.Point(0, 438);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1309, 42);
+            this.panel1.Size = new System.Drawing.Size(1137, 42);
             this.panel1.TabIndex = 1;
+            // 
+            // lblError
+            // 
+            this.lblError.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblError.Location = new System.Drawing.Point(597, 10);
+            this.lblError.Name = "lblError";
+            this.lblError.Size = new System.Drawing.Size(331, 23);
+            this.lblError.TabIndex = 7;
+            this.lblError.Text = "---";
+            this.lblError.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel4
             // 
@@ -93,7 +106,7 @@
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel4.Controls.Add(this.pnlColor);
             this.panel4.Controls.Add(this.lblStatus);
-            this.panel4.Location = new System.Drawing.Point(1106, 6);
+            this.panel4.Location = new System.Drawing.Point(934, 6);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(200, 32);
             this.panel4.TabIndex = 6;
@@ -162,7 +175,7 @@
             this.panel2.Controls.Add(this.chkOverridePalette);
             this.panel2.Location = new System.Drawing.Point(154, 6);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(712, 32);
+            this.panel2.Size = new System.Drawing.Size(437, 32);
             this.panel2.TabIndex = 5;
             // 
             // label1
@@ -253,7 +266,7 @@
             this.tabsTools.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.tabsTools.Controls.Add(this.tabMinimap);
             this.tabsTools.Controls.Add(this.tabHisto);
-            this.tabsTools.Location = new System.Drawing.Point(0, 275);
+            this.tabsTools.Location = new System.Drawing.Point(0, 106);
             this.tabsTools.Margin = new System.Windows.Forms.Padding(0);
             this.tabsTools.Name = "tabsTools";
             this.tabsTools.SelectedIndex = 0;
@@ -284,13 +297,13 @@
             // 
             // chartHisto
             // 
-            chartArea1.AxisY.LabelStyle.Enabled = false;
-            chartArea1.Name = "ChartArea1";
-            this.chartHisto.ChartAreas.Add(chartArea1);
+            chartArea2.AxisY.LabelStyle.Enabled = false;
+            chartArea2.Name = "ChartArea1";
+            this.chartHisto.ChartAreas.Add(chartArea2);
             this.chartHisto.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Enabled = false;
-            legend1.Name = "Legend1";
-            this.chartHisto.Legends.Add(legend1);
+            legend2.Enabled = false;
+            legend2.Name = "Legend1";
+            this.chartHisto.Legends.Add(legend2);
             this.chartHisto.Location = new System.Drawing.Point(3, 3);
             this.chartHisto.Name = "chartHisto";
             this.chartHisto.Size = new System.Drawing.Size(300, 300);
@@ -305,7 +318,7 @@
             this.Controls.Add(this.imgBox);
             this.Controls.Add(this.panel1);
             this.Name = "ImageControl";
-            this.Size = new System.Drawing.Size(1309, 649);
+            this.Size = new System.Drawing.Size(1137, 480);
             this.Load += new System.EventHandler(this.ImageControl_Load);
             this.panel1.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
@@ -345,5 +358,6 @@
         private System.Windows.Forms.TabPage tabMinimap;
         private System.Windows.Forms.TabPage tabHisto;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartHisto;
+        private System.Windows.Forms.Label lblError;
     }
 }
